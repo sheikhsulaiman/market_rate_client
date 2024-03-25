@@ -10,10 +10,7 @@ class GroceriesPage extends StatefulWidget {
 }
 
 class _GroceriesPageState extends State<GroceriesPage> {
-  final _future = Supabase.instance.client.from('prices').select('''
-    price,created_at,bigmarkets(name),groceries(name,image_url)
-    
-  ''');
+  final _future = Supabase.instance.client.from('groceries').select("*");
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +28,10 @@ class _GroceriesPageState extends State<GroceriesPage> {
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
                 return GroceryTile(
-                  groceryName: data[index]['groceries']['name'].toString(),
-                  bigMarketName: data[index]['bigmarkets']['name'].toString(),
-                  price: data[index]['price'].toDouble(),
-                  groceryImageUrl:
-                      data[index]['groceries']['image_url'].toString(),
+                  groceryName: data[index]['name'].toString(),
+                  id: data[index]['id'].toString(),
+                  unit: data[index]['unit'].toString(),
+                  groceryImageUrl: data[index]['image_url'].toString(),
                 );
               },
             );
