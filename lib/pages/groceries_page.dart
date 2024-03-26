@@ -10,33 +10,70 @@ class GroceriesPage extends StatefulWidget {
 }
 
 class _GroceriesPageState extends State<GroceriesPage> {
-  final _future = Supabase.instance.client.from('groceries').select("*");
+  String searchText = '';
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final future = Supabase.instance.client
+        .from('groceries')
+        .select("id, name, unit, image_url")
+        .ilike('name', '%$searchText%');
     return Center(
-      child: FutureBuilder(
-        future: _future,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            final data = snapshot.data as List<dynamic>;
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return GroceryTile(
-                  groceryName: data[index]['name'].toString(),
-                  id: data[index]['id'].toString(),
-                  unit: data[index]['unit'].toString(),
-                  groceryImageUrl: data[index]['image_url'].toString(),
-                );
-              },
-            );
-          }
-        },
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                hintText: 'Search for groceries',
+                prefixIcon: const Icon(Icons.search),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: FutureBuilder(
+                future: future,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+
+                  final data = snapshot.data as List<dynamic>;
+
+                  return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      final item = data[index];
+                      return GroceryTile(
+                        id: item['id'],
+                        groceryName: item['name'],
+                        unit: item['unit'],
+                        groceryImageUrl: item['image_url'],
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
