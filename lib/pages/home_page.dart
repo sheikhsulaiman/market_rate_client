@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:intl/intl.dart';
 import 'package:market_rate/pages/favorites_page.dart';
 import 'package:market_rate/pages/groceries_page.dart';
 import 'package:market_rate/pages/markets_page.dart';
@@ -13,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  DateTime _selectedDate = DateTime.now();
   static const List<String> _titles = ["Markets", "Groceries", "Favorites"];
   static const List<Widget> _widgetOption = [
     MarketsPage(),
@@ -25,6 +27,23 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(_titles.elementAt(_selectedIndex)),
+        actions: [
+          Text(DateFormat().add_yMMMEd().format(_selectedDate).toString()),
+          IconButton(
+              onPressed: () {
+                showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2023),
+                        lastDate: DateTime(2025))
+                    .then((value) => setState(() {
+                          if (value != null) {
+                            _selectedDate = value;
+                          }
+                        }));
+              },
+              icon: const Icon(Icons.calendar_today_outlined)),
+        ],
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
