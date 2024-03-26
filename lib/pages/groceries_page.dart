@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:market_rate/widgets/grocery_tile.dart';
+import 'package:market_rate/widgets/skeletons/grocery_tile_skeleton.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class GroceriesPage extends StatefulWidget {
@@ -12,6 +13,12 @@ class GroceriesPage extends StatefulWidget {
 class _GroceriesPageState extends State<GroceriesPage> {
   String searchText = '';
   final TextEditingController _searchController = TextEditingController();
+
+  void _onSearchTextChanged() {
+    setState(() {
+      searchText = _searchController.text;
+    });
+  }
 
   @override
   void dispose() {
@@ -32,6 +39,7 @@ class _GroceriesPageState extends State<GroceriesPage> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _searchController,
+              onChanged: (_) => _onSearchTextChanged(),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(0),
                 border: OutlineInputBorder(
@@ -48,7 +56,12 @@ class _GroceriesPageState extends State<GroceriesPage> {
                 future: future,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return ListView.builder(
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        return const GroceryTileSkeleton();
+                      },
+                    );
                   }
 
                   if (snapshot.hasError) {

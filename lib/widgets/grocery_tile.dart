@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:market_rate/utils/capitalize.dart';
+import 'package:market_rate/widgets/skeletons/grocery_sub_tile_skeleton.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class GroceryTile extends StatefulWidget {
@@ -23,22 +24,14 @@ class GroceryTile extends StatefulWidget {
 }
 
 class _GroceryTileState extends State<GroceryTile> {
-  double _avgPrice = 0.0;
   @override
   Widget build(BuildContext context) {
-    final _future = Supabase.instance.client.from('prices').select('''
+    final future = Supabase.instance.client.from('prices').select('''
           *,
           groceries:grocery_id(*),
           big_markets:bigmarkets(*)
         ''').eq("grocery_id", widget.id);
 
-    _future.then((value) {
-      final data = value as List<dynamic>;
-      final double sumPrice = data.fold(
-          0, (previousValue, element) => previousValue + element['price']);
-
-      _avgPrice = sumPrice / data.length;
-    });
     return Container(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.all(8),
@@ -87,10 +80,10 @@ class _GroceryTileState extends State<GroceryTile> {
             ),
           ),
           FutureBuilder(
-            future: _future,
+            future: future,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
+                return const GrocerySubTileSkeleton();
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {
