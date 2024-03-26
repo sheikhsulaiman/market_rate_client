@@ -101,7 +101,7 @@ class _GroceryTileState extends State<GroceryTile> {
                       child: ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: data.length,
+                        itemCount: data.length > 5 ? 5 : data.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
                             decoration: BoxDecoration(
