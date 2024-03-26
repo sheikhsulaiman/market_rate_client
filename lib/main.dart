@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:market_rate/pages/home_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,7 +11,10 @@ Future<void> main() async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56cnVlcnBqY2lyZ3R0dmdlZnVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEyNzg4NTAsImV4cCI6MjAyNjg1NDg1MH0.Yh8tvRfU5MFSBvx_rpCcFDLv0c0VrdWEFY_SEYlaFNw',
   );
-  runApp(const MyApp());
+  runApp(
+    // Adding ProviderScope enables Riverpod for the entire project
+    const ProviderScope(child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
