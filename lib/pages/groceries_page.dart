@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:market_rate/providers/date_provider.dart';
 import 'package:market_rate/widgets/grocery_tile.dart';
 import 'package:market_rate/widgets/skeletons/grocery_tile_skeleton.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:market_rate/pages/favorites_page.dart';
 import 'package:market_rate/pages/groceries_page.dart';
 import 'package:market_rate/pages/markets_page.dart';
+import 'package:market_rate/providers/date_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -40,6 +41,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     .then((value) => setState(() {
                           if (value != null) {
                             _selectedDate = value;
+                            ref.read(dateProvider.notifier).setDate(value);
                           }
                         }));
               },
