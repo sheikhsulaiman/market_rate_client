@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:market_rate/providers/date_provider.dart';
 import 'package:market_rate/widgets/grocery_tile.dart';
 import 'package:market_rate/widgets/skeletons/grocery_tile_skeleton.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:chips_choice/chips_choice.dart';
 
 class GroceriesPage extends StatefulWidget {
   const GroceriesPage({super.key});
@@ -11,6 +14,30 @@ class GroceriesPage extends StatefulWidget {
 }
 
 class _GroceriesPageState extends State<GroceriesPage> {
+  // multiple choice value
+  List<String> tags = [
+    'dhaka',
+    'mymenshingh',
+    'khulna',
+    'rajshahi',
+    'rangpur',
+    'syhlet',
+    'chattogram',
+    'barishal',
+  ];
+
+  // list of string options
+  List<String> options = [
+    'dhaka',
+    'mymenshingh',
+    'khulna',
+    'rajshahi',
+    'rangpur',
+    'syhlet',
+    'chattogram',
+    'barishal',
+  ];
+
   String searchText = '';
   final TextEditingController _searchController = TextEditingController();
 
@@ -29,9 +56,12 @@ class _GroceriesPageState extends State<GroceriesPage> {
   @override
   Widget build(BuildContext context) {
     final future = Supabase.instance.client
-        .from('groceries')
-        .select("id, name, unit, image_url")
-        .ilike('name', '%$searchText%');
+            .from('groceries')
+            .select("id, name, unit, image_url")
+            .ilike('name', '%$searchText%')
+        // .eq('created_at', selectedDate.toIso8601String())
+        ;
+
     return Center(
       child: Column(
         children: [
@@ -48,6 +78,21 @@ class _GroceriesPageState extends State<GroceriesPage> {
                 hintText: 'Search for groceries',
                 prefixIcon: const Icon(Icons.search),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ChipsChoice<String>.multiple(
+              value: tags,
+              onChanged: (val) => setState(() => tags = val),
+              choiceItems: C2Choice.listFrom<String, String>(
+                source: options,
+                value: (i, v) => v,
+                label: (i, v) => v,
+                tooltip: (i, v) => v,
+              ),
+              choiceCheckmark: true,
+              choiceStyle: C2ChipStyle.outlined(),
             ),
           ),
           Expanded(

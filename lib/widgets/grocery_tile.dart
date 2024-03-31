@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:market_rate/providers/date_provider.dart';
 import 'package:market_rate/utils/capitalize.dart';
 import 'package:market_rate/widgets/skeletons/grocery_sub_tile_skeleton.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class GroceryTile extends StatefulWidget {
+class GroceryTile extends ConsumerStatefulWidget {
   final String groceryName;
 
   final String id;
@@ -20,17 +22,20 @@ class GroceryTile extends StatefulWidget {
   });
 
   @override
-  State<GroceryTile> createState() => _GroceryTileState();
+  ConsumerState<GroceryTile> createState() => _GroceryTileState();
 }
 
-class _GroceryTileState extends State<GroceryTile> {
+class _GroceryTileState extends ConsumerState<GroceryTile> {
   @override
   Widget build(BuildContext context) {
+    final selectedDate = ref.watch(dateProvider);
+
+    String formattedDate = selectedDate.toString().substring(0, 10);
     final future = Supabase.instance.client.from('prices').select('''
           *,
           groceries:grocery_id(*),
           big_markets:bigmarkets(*)
-        ''').eq("grocery_id", widget.id);
+        ''').eq("grocery_id", widget.id).eq('date', formattedDate);
 
     return Container(
       padding: const EdgeInsets.all(8),
