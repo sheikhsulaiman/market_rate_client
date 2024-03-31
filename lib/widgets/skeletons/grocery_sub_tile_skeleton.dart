@@ -8,8 +8,8 @@ class GrocerySubTileSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.all(8),
-        padding: EdgeInsets.symmetric(vertical: 4),
+        margin: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(vertical: 4),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
