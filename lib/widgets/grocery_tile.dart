@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:market_rate/pages/grocery_page.dart';
 import 'package:market_rate/providers/date_provider.dart';
 import 'package:market_rate/providers/divisions_provider.dart';
 import 'package:market_rate/utils/capitalize.dart';
@@ -71,22 +72,50 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(capitalize(widget.groceryName),
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary)),
-                const SizedBox(width: 8),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: Image.network(
-                    widget.groceryImageUrl,
-                    width: 50,
-                    height: 30,
-                    fit: BoxFit.cover,
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      clipBehavior: Clip.hardEdge,
+                      child: Image.network(
+                        widget.groceryImageUrl,
+                        width: 50,
+                        height: 30,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(capitalize(widget.groceryName),
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary)),
+                  ],
+                ),
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: IconButton.outlined(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => GroceryPage(
+                            groceryName: widget.groceryName,
+                            groceryId: widget.id,
+                            groceryImageUrl: widget.groceryImageUrl,
+                          ),
+                        ),
+                      );
+                    },
+                    color: Theme.of(context).colorScheme.primary,
+                    padding: const EdgeInsets.all(0.0),
+                    icon: Icon(
+                      Icons.arrow_outward_outlined,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
               ],
@@ -202,6 +231,7 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
                         },
                       ),
                     ),
+
                     // const SizedBox(width: 16),
                     // Column(
                     //   children: [
