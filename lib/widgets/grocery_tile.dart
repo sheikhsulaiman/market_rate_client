@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:market_rate/providers/date_provider.dart';
@@ -155,13 +156,21 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(capitalize(filteredData[index]
-                                              ['big_markets']['name']
-                                          .toString())),
+                                      Flexible(
+                                        child: Text(
+                                          capitalize(filteredData[index]
+                                                  ['big_markets']['name']
+                                              .toString()),
+                                          style: const TextStyle(
+                                            overflow: TextOverflow.clip,
+                                          ),
+                                        ),
+                                      ),
                                       const SizedBox(width: 8),
                                       Text(
                                         "${filteredData[index]['price'].toString()} 	৳ / ${filteredData[index]['groceries']['unit']}",
                                         style: TextStyle(
+                                            overflow: TextOverflow.clip,
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .secondary),
