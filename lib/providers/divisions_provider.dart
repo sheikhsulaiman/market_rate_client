@@ -1,17 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DivisionsNotifier extends StateNotifier<List<String>> {
-  DivisionsNotifier()
-      : super([
-          'dhaka',
-          'mymenshingh',
-          'khulna',
-          'rajshahi',
-          'rangpur',
-          'syhlet',
-          'chattogram',
-          'barishal',
-        ]);
+  DivisionsNotifier() : super(['dhaka']);
 
   void setDivisions(List<String> divisions) {
     state = divisions;

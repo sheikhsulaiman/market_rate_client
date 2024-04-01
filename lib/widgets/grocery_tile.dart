@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:market_rate/providers/date_provider.dart';
+import 'package:market_rate/providers/divisions_provider.dart';
 import 'package:market_rate/utils/capitalize.dart';
 import 'package:market_rate/widgets/skeletons/grocery_sub_tile_skeleton.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -29,13 +30,19 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
   @override
   Widget build(BuildContext context) {
     final selectedDate = ref.watch(dateProvider);
+    final selectedDivisions = ref.watch(divisionsProvider);
 
     String formattedDate = selectedDate.toString().substring(0, 10);
-    final future = Supabase.instance.client.from('prices').select('''
+    final future = Supabase.instance.client
+        .from('prices')
+        .select('''
           price,local_price,
           groceries:grocery_id(name,unit),
-          big_markets:bigmarkets(name)
-        ''').eq("grocery_id", widget.id).eq('date', formattedDate);
+          big_markets:bigmarkets(name,division)
+        ''')
+        .eq("grocery_id", widget.id)
+        .eq('date', formattedDate)
+        .order('price', ascending: true);
 
     return Container(
       padding: const EdgeInsets.all(8),
@@ -93,8 +100,12 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
                 return Text('Error: ${snapshot.error}');
               } else {
                 final data = snapshot.data as List<dynamic>;
+                final filteredData = data
+                    .where((element) => selectedDivisions
+                        .contains(element['big_markets']['division']))
+                    .toList();
 
-                if (data.isEmpty) {
+                if (filteredData.isEmpty) {
                   return Container(
                     margin: const EdgeInsets.only(top: 8),
                     padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -122,7 +133,8 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
                       child: ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: data.length > 5 ? 5 : data.length,
+                        itemCount:
+                            filteredData.length > 5 ? 5 : filteredData.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -143,12 +155,12 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(capitalize(data[index]['big_markets']
-                                              ['name']
+                                      Text(capitalize(filteredData[index]
+                                              ['big_markets']['name']
                                           .toString())),
                                       const SizedBox(width: 8),
                                       Text(
-                                        "${data[index]['price'].toString()} 	৳ / ${data[index]['groceries']['unit']}",
+                                        "${filteredData[index]['price'].toString()} 	৳ / ${filteredData[index]['groceries']['unit']}",
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
@@ -169,7 +181,7 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
                                         .colorScheme
                                         .onSurface),
                                 child: Text(
-                                  data[index]['local_price'].toString(),
+                                  filteredData[index]['local_price'].toString(),
                                   style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme

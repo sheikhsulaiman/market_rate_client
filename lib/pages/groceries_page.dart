@@ -1,41 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:market_rate/providers/divisions_provider.dart';
 import 'package:market_rate/widgets/grocery_tile.dart';
 import 'package:market_rate/widgets/skeletons/grocery_tile_skeleton.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:chips_choice/chips_choice.dart';
 
-class GroceriesPage extends StatefulWidget {
+class GroceriesPage extends ConsumerStatefulWidget {
   const GroceriesPage({super.key});
 
   @override
-  State<GroceriesPage> createState() => _GroceriesPageState();
+  ConsumerState<GroceriesPage> createState() => _GroceriesPageState();
 }
 
-class _GroceriesPageState extends State<GroceriesPage> {
-  // multiple choice value
-  List<String> tags = [
-    'dhaka',
-    'mymenshingh',
-    'khulna',
-    'rajshahi',
-    'rangpur',
-    'syhlet',
-    'chattogram',
-    'barishal',
-  ];
-
-  // list of string options
-  List<String> options = [
-    'dhaka',
-    'mymenshingh',
-    'khulna',
-    'rajshahi',
-    'rangpur',
-    'syhlet',
-    'chattogram',
-    'barishal',
-  ];
-
+class _GroceriesPageState extends ConsumerState<GroceriesPage> {
   String searchText = '';
   final TextEditingController _searchController = TextEditingController();
 
@@ -60,6 +38,21 @@ class _GroceriesPageState extends State<GroceriesPage> {
         // .eq('created_at', selectedDate.toIso8601String())
         ;
 
+    // multiple choice value
+    List<String> tags = ref.watch(divisionsProvider);
+
+    // list of string options
+    List<String> options = [
+      'dhaka',
+      'mymenshingh',
+      'khulna',
+      'rajshahi',
+      'rangpur',
+      'syhlet',
+      'chattogram',
+      'barishal',
+    ];
+
     return Center(
       child: Column(
         children: [
@@ -78,11 +71,17 @@ class _GroceriesPageState extends State<GroceriesPage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          Container(
+            color:
+                Theme.of(context).colorScheme.primaryContainer.withOpacity(.2),
             child: ChipsChoice<String>.multiple(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
               value: tags,
-              onChanged: (val) => setState(() => tags = val),
+              onChanged: (val) => setState(() {
+                tags = val;
+                ref.read(divisionsProvider.notifier).setDivisions(val);
+              }),
               choiceItems: C2Choice.listFrom<String, String>(
                 source: options,
                 value: (i, v) => v,
