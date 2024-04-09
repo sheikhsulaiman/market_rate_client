@@ -79,11 +79,14 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       clipBehavior: Clip.hardEdge,
-                      child: Image.network(
-                        widget.groceryImageUrl,
-                        width: 50,
-                        height: 30,
-                        fit: BoxFit.cover,
+                      child: Hero(
+                        tag: widget.id,
+                        child: Image.network(
+                          widget.groceryImageUrl,
+                          width: 50,
+                          height: 30,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -94,27 +97,32 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
                             color: Theme.of(context).colorScheme.primary)),
                   ],
                 ),
-                SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: IconButton.outlined(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => GroceryPage(
-                            groceryName: widget.groceryName,
-                            groceryId: widget.id,
-                            groceryImageUrl: widget.groceryImageUrl,
-                          ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => GroceryPage(
+                          groceryName: widget.groceryName,
+                          groceryId: widget.id,
+                          groceryImageUrl: widget.groceryImageUrl,
                         ),
-                      );
-                    },
-                    color: Theme.of(context).colorScheme.primary,
-                    padding: const EdgeInsets.all(0.0),
-                    icon: Icon(
-                      Icons.arrow_outward_outlined,
-                      size: 18,
+                      ),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context)
+                        .colorScheme
+                        .primaryContainer
+                        .withOpacity(.5)),
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 0)),
+                  ),
+                  child: Text(
+                    "Expand",
+                    style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
+                      fontSize: 12,
                     ),
                   ),
                 ),
@@ -149,13 +157,6 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
                     ),
                   );
                 }
-
-                // final double sumPrice = data.fold(
-                //     0,
-                //     (previousValue, element) =>
-                //         previousValue + element['price']);
-
-                // final double avaragePrice = sumPrice / data.length;
 
                 return Row(
                   children: [
@@ -231,38 +232,6 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
                         },
                       ),
                     ),
-
-                    // const SizedBox(width: 16),
-                    // Column(
-                    //   children: [
-                    //     Text("average",
-                    //         style: TextStyle(
-                    //             fontSize: 12,
-                    //             color: Theme.of(context)
-                    //                 .colorScheme
-                    //                 .secondary
-                    //                 .withOpacity(.5))),
-                    //     const SizedBox(height: 4),
-                    //     Container(
-                    //       width: 50,
-                    //       alignment: const Alignment(0, 0),
-                    //       decoration: BoxDecoration(
-                    //         color: Theme.of(context)
-                    //             .colorScheme
-                    //             .primary
-                    //             .withOpacity(.1),
-                    //         borderRadius: BorderRadius.circular(4),
-                    //       ),
-                    //       child: Text(
-                    //         avaragePrice.toStringAsPrecision(4),
-                    //         style: TextStyle(
-                    //           color: Theme.of(context).colorScheme.primary,
-                    //           fontSize: 16,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   ],
                 );
               }
