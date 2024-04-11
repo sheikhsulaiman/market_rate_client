@@ -2,6 +2,7 @@ import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:market_rate/providers/divisions_provider.dart';
+import 'package:market_rate/widgets/market_tile.dart';
 import 'package:market_rate/widgets/skeletons/grocery_tile_skeleton.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -117,13 +118,10 @@ class _MarketsPageState extends ConsumerState<MarketsPage> {
                   return ListView.builder(
                     itemCount: filteredData.length,
                     itemBuilder: (context, index) {
-                      return Text('${filteredData[index]['name']}');
-                      // GroceryTile(
-                      //   id: item['id'],
-                      //   groceryName: item['name'],
-                      //   unit: item['unit'],
-                      //   groceryImageUrl: item['image_url'],
-                      // );
+                      return MarketTile(
+                        id: filteredData[index]['id'],
+                        marketName: filteredData[index]['name'],
+                      );
                     },
                   );
                 },

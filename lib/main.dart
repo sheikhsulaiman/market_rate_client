@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:market_rate/pages/home_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  //initialize hive
+  await Hive.initFlutter();
+
+  //open the box
+  await Hive.openBox('favirite_markets_box');
+  await Hive.openBox('favorite_groceries_box');
 
   await Supabase.initialize(
     url: 'https://nzruerpjcirgttvgefua.supabase.co',
