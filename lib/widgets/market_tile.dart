@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:market_rate/providers/date_provider.dart';
 import 'package:market_rate/providers/divisions_provider.dart';
+import 'package:market_rate/providers/favorite_market_provider.dart';
 import 'package:market_rate/utils/capitalize.dart';
 import 'package:market_rate/widgets/skeletons/grocery_sub_tile_skeleton.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,6 +26,7 @@ class _MarketTileState extends ConsumerState<MarketTile> {
     var favoriteMarketsBox = Hive.openBox('favirite_markets_box');
     final selectedDate = ref.watch(dateProvider);
     final selectedDivisions = ref.watch(divisionsProvider);
+    final favoriteMarkets = ref.watch(favoriteMarketsProvider);
 
     String formattedDate = selectedDate.toString().substring(0, 10);
     final future = isExpanded

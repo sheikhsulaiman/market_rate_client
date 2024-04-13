@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:market_rate/providers/date_provider.dart';
+import 'package:market_rate/providers/favorite_groceries_provider.dart';
 import 'package:market_rate/utils/capitalize.dart';
 import 'package:market_rate/widgets/skeletons/grocery_sub_tile_skeleton.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -25,7 +26,8 @@ class _GroceryPageState extends ConsumerState<GroceryPage> {
   @override
   Widget build(BuildContext context) {
     final selectedDate = ref.watch(dateProvider);
-    var favoriteGroceriesBox = Hive.openBox('favorite_groceries_box');
+    // var favoriteGroceriesBox = Hive.openBox('favorite_groceries_box');
+    final favoriteGroceriesBox = ref.watch(favoriteGroceriesProvider);
 
     String formattedDate = selectedDate.toString().substring(0, 10);
 
@@ -63,35 +65,23 @@ class _GroceryPageState extends ConsumerState<GroceryPage> {
           actions: [
             IconButton(
               onPressed: () async {
-                await favoriteGroceriesBox.then((value) {
-                  if (value.containsKey(widget.groceryId)) {
-                    setState(() {
-                      value.delete(widget.groceryId);
-                    });
-                  } else {
-                    setState(() {
-                      value.put(widget.groceryId, widget.groceryName);
-                    });
-                  }
-                });
+                if (favoriteGroceriesBox.containsKey(widget.groceryId)) {
+                  setState(() {
+                    ref
+                        .read(favoriteGroceriesProvider.notifier)
+                        .removeFavorite(widget.groceryId);
+                  });
+                } else {
+                  setState(() {
+                    ref
+                        .read(favoriteGroceriesProvider.notifier)
+                        .addFavorite(widget.groceryId, widget.groceryName);
+                  });
+                }
               },
-              icon: FutureBuilder(
-                future: favoriteGroceriesBox,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Icon(Icons.favorite_border);
-                  } else if (snapshot.hasError) {
-                    return const Icon(Icons.favorite_border);
-                  } else {
-                    final data = snapshot.data as Box<dynamic>;
-                    if (data.containsKey(widget.groceryId)) {
-                      return const Icon(Icons.favorite, color: Colors.red);
-                    } else {
-                      return const Icon(Icons.favorite_border);
-                    }
-                  }
-                },
-              ),
+              icon: Icon(favoriteGroceriesBox.containsKey(widget.groceryId)
+                  ? Icons.favorite
+                  : Icons.favorite_border),
             ),
           ],
         ),
