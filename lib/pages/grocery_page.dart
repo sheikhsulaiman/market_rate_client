@@ -27,7 +27,7 @@ class _GroceryPageState extends ConsumerState<GroceryPage> {
   Widget build(BuildContext context) {
     final selectedDate = ref.watch(dateProvider);
     // var favoriteGroceriesBox = Hive.openBox('favorite_groceries_box');
-    final favoriteGroceriesBox = ref.watch(favoriteGroceriesProvider);
+    final favoriteGroceries = ref.watch(favoriteGroceriesProvider);
 
     String formattedDate = selectedDate.toString().substring(0, 10);
 
@@ -65,7 +65,7 @@ class _GroceryPageState extends ConsumerState<GroceryPage> {
           actions: [
             IconButton(
               onPressed: () async {
-                if (favoriteGroceriesBox.containsKey(widget.groceryId)) {
+                if (favoriteGroceries.containsKey(widget.groceryId)) {
                   setState(() {
                     ref
                         .read(favoriteGroceriesProvider.notifier)
@@ -79,7 +79,7 @@ class _GroceryPageState extends ConsumerState<GroceryPage> {
                   });
                 }
               },
-              icon: Icon(favoriteGroceriesBox.containsKey(widget.groceryId)
+              icon: Icon(favoriteGroceries.containsKey(widget.groceryId)
                   ? Icons.favorite
                   : Icons.favorite_border),
             ),

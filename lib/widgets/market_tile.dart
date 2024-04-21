@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:market_rate/providers/date_provider.dart';
 import 'package:market_rate/providers/divisions_provider.dart';
@@ -23,7 +22,6 @@ class _MarketTileState extends ConsumerState<MarketTile> {
 
   @override
   Widget build(BuildContext context) {
-    var favoriteMarketsBox = Hive.openBox('favirite_markets_box');
     final selectedDate = ref.watch(dateProvider);
     final selectedDivisions = ref.watch(divisionsProvider);
     final favoriteMarkets = ref.watch(favoriteMarketsProvider);
@@ -83,43 +81,24 @@ class _MarketTileState extends ConsumerState<MarketTile> {
                 ),
                 Row(
                   children: [
-                    FutureBuilder(
-                      future: favoriteMarketsBox,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          final favoriteMarketsBox =
-                              snapshot.data as Box<dynamic>;
-                          final isFavorite = favoriteMarketsBox
-                              .containsKey(widget.id.toString());
-                          return IconButton(
-                            onPressed: () {
-                              if (isFavorite) {
-                                setState(() {
-                                  favoriteMarketsBox
-                                      .delete(widget.id.toString());
-                                });
-                              } else {
-                                setState(() {
-                                  favoriteMarketsBox.put(
-                                      widget.id.toString(), widget.marketName);
-                                });
-                              }
-                            },
-                            icon: Icon(
-                              isFavorite
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          );
-                        }
-                      },
-                    ),
+                    IconButton(
+                        onPressed: () {
+                          if (favoriteMarkets.containsKey(widget.id)) {
+                            ref
+                                .read(favoriteMarketsProvider.notifier)
+                                .removeFavorite(widget.id);
+                          } else {
+                            ref
+                                .read(favoriteMarketsProvider.notifier)
+                                .addFavorite(widget.id, widget.marketName);
+                          }
+                        },
+                        icon: Icon(
+                          favoriteMarkets.containsKey(widget.id)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: Theme.of(context).colorScheme.primary,
+                        )),
                     TextButton(
                       onPressed: () {
                         setState(() {

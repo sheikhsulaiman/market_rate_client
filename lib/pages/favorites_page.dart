@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:market_rate/providers/favorite_groceries_provider.dart';
+import 'package:market_rate/providers/favorite_market_provider.dart';
 
-class FavoritePage extends StatefulWidget {
+class FavoritePage extends ConsumerStatefulWidget {
   const FavoritePage({super.key});
 
   @override
-  State<FavoritePage> createState() => _FavoritePageState();
+  ConsumerState<FavoritePage> createState() => _FavoritePageState();
 }
 
-class _FavoritePageState extends State<FavoritePage> {
+class _FavoritePageState extends ConsumerState<FavoritePage> {
   @override
   Widget build(BuildContext context) {
-    var favoriteMarketsBox = Hive.openBox('favorite_markets_box');
-    var favoriteGroceriesBox = Hive.openBox('favorite_groceries_box');
+    final favoriteGroceries = ref.watch(favoriteGroceriesProvider);
+    final favoriteGroceriesList = favoriteGroceries.values.toList();
+
+    print(favoriteGroceriesList);
+
+    final favoriteMarkets = ref.watch(favoriteMarketsProvider);
+    final favoriteMarketsList = favoriteMarkets.values.toList();
+
+    print(favoriteMarketsList);
+
     return DefaultTabController(
       length: 2,
       child: Column(
@@ -30,37 +40,10 @@ class _FavoritePageState extends State<FavoritePage> {
           Expanded(
             child: TabBarView(
               children: [
-                FutureBuilder(
-                  future: favoriteMarketsBox,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      final data = snapshot.data;
-
-                      return ListView.builder(
-                          itemCount: data!.keys.length,
-                          itemBuilder: (context, index) {
-                            final key = data.keyAt(index);
-                            final value = data.get(key);
-
-                            return ListTile(
-                              title: Text(value),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () {
-                                  data.delete(key);
-                                  setState(() {});
-                                },
-                              ),
-                            );
-                          });
-                    }
-                  },
+                const Center(
+                  child: Text('Markets'),
                 ),
-                Center(
+                const Center(
                   child: Text('Groceries'),
                 ),
               ],
