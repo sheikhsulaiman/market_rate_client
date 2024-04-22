@@ -10,7 +10,7 @@ class Favorite extends StatelessWidget {
         itemBuilder: (context, index) => ListTile(
             title: Text(items[index]),
             trailing: IconButton(
-              icon: Icon(Icons.delete),
+              icon: const Icon(Icons.delete),
               onPressed: () {
                 // remove the item from the list
               },

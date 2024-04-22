@@ -84,13 +84,17 @@ class _MarketTileState extends ConsumerState<MarketTile> {
                     IconButton(
                         onPressed: () {
                           if (favoriteMarkets.containsKey(widget.id)) {
-                            ref
-                                .read(favoriteMarketsProvider.notifier)
-                                .removeFavorite(widget.id);
+                            setState(() {
+                              ref
+                                  .read(favoriteMarketsProvider.notifier)
+                                  .removeFavorite(widget.id);
+                            });
                           } else {
-                            ref
-                                .read(favoriteMarketsProvider.notifier)
-                                .addFavorite(widget.id, widget.marketName);
+                            setState(() {
+                              ref
+                                  .read(favoriteMarketsProvider.notifier)
+                                  .addFavorite(widget.id, widget.marketName);
+                            });
                           }
                         },
                         icon: Icon(

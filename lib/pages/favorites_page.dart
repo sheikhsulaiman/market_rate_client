@@ -23,11 +23,11 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
 
     print(favoriteMarketsList);
 
-    return DefaultTabController(
+    return const DefaultTabController(
       length: 2,
       child: Column(
         children: [
-          const TabBar(
+          TabBar(
             tabs: [
               Tab(
                 child: Text('Markets'),
@@ -40,10 +40,10 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
           Expanded(
             child: TabBarView(
               children: [
-                const Center(
+                Center(
                   child: Text('Markets'),
                 ),
-                const Center(
+                Center(
                   child: Text('Groceries'),
                 ),
               ],
