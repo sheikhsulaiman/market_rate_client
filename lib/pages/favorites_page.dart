@@ -74,6 +74,11 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
                                       .contains(element['id']))
                                   .toList();
 
+                              if (filteredData.isEmpty) {
+                                return const Center(
+                                    child: Text('No favorite markets yet'));
+                              }
+
                               return ListView.builder(
                                 itemCount: filteredData.length,
                                 itemBuilder: (context, index) {
@@ -113,6 +118,11 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
                           .where((element) =>
                               favoriteGroceriesList.contains(element['id']))
                           .toList();
+
+                      if (filteredData.isEmpty) {
+                        return const Center(
+                            child: Text('No favorite groceries yet'));
+                      }
 
                       return ListView.builder(
                         itemCount: filteredData.length,
