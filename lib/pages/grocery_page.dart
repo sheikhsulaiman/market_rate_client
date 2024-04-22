@@ -65,7 +65,7 @@ class _GroceryPageState extends ConsumerState<GroceryPage> {
           actions: [
             IconButton(
               onPressed: () async {
-                if (favoriteGroceries.containsKey(widget.groceryId)) {
+                if (favoriteGroceries.contains(widget.groceryId)) {
                   setState(() {
                     ref
                         .read(favoriteGroceriesProvider.notifier)
@@ -79,7 +79,7 @@ class _GroceryPageState extends ConsumerState<GroceryPage> {
                   });
                 }
               },
-              icon: Icon(favoriteGroceries.containsKey(widget.groceryId)
+              icon: Icon(favoriteGroceries.contains(widget.groceryId)
                   ? Icons.favorite
                   : Icons.favorite_border),
             ),

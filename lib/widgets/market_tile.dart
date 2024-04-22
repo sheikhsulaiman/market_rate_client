@@ -83,7 +83,7 @@ class _MarketTileState extends ConsumerState<MarketTile> {
                   children: [
                     IconButton(
                         onPressed: () {
-                          if (favoriteMarkets.containsKey(widget.id)) {
+                          if (favoriteMarkets.contains(widget.id)) {
                             setState(() {
                               ref
                                   .read(favoriteMarketsProvider.notifier)
@@ -98,7 +98,7 @@ class _MarketTileState extends ConsumerState<MarketTile> {
                           }
                         },
                         icon: Icon(
-                          favoriteMarkets.containsKey(widget.id)
+                          favoriteMarkets.contains(widget.id)
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: Theme.of(context).colorScheme.primary,

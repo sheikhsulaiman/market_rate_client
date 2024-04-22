@@ -1,23 +1,26 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class FavoriteMarketsNotifier extends StateNotifier<Map<int, String>> {
-  FavoriteMarketsNotifier() : super({});
-
-  var favoriteMarketBox = Hive.openBox('favorite_markets_box');
+class FavoriteMarketsNotifier extends StateNotifier<List<int>> {
+  var favoriteMarketBox = Hive.box('favorite_markets_box');
+  FavoriteMarketsNotifier() : super([]) {
+    for (var key in favoriteMarketBox.keys) {
+      state.add(key);
+    }
+  }
 
   Future<void> addFavorite(int id, String name) async {
-    state[id] = name;
-    await favoriteMarketBox.then((value) => value.put(id, name));
+    state.add(id);
+    favoriteMarketBox.put(id, name);
   }
 
   void removeFavorite(int id) {
     state.remove(id);
-    favoriteMarketBox.then((value) => value.delete(id));
+    favoriteMarketBox.delete(id);
   }
 }
 
 final favoriteMarketsProvider =
-    StateNotifierProvider<FavoriteMarketsNotifier, Map<int, String>>((ref) {
+    StateNotifierProvider<FavoriteMarketsNotifier, List<int>>((ref) {
   return FavoriteMarketsNotifier();
 });

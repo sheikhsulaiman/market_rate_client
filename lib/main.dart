@@ -7,18 +7,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  //initialize hive
-  await Hive.initFlutter();
-
-  //open the box
-  await Hive.openBox('favirite_markets_box');
-  await Hive.openBox('favorite_groceries_box');
-
   await Supabase.initialize(
     url: 'https://nzruerpjcirgttvgefua.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56cnVlcnBqY2lyZ3R0dmdlZnVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEyNzg4NTAsImV4cCI6MjAyNjg1NDg1MH0.Yh8tvRfU5MFSBvx_rpCcFDLv0c0VrdWEFY_SEYlaFNw',
   );
+
+  //initialize hive
+  await Hive.initFlutter();
+
+  //open the box
+  await Hive.openBox('favorite_markets_box');
+  await Hive.openBox('favorite_groceries_box');
+
   runApp(
     // Adding ProviderScope enables Riverpod for the entire project
     const ProviderScope(child: MyApp()),

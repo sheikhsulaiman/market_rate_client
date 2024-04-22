@@ -18,9 +18,9 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     final favoriteGroceries = ref.watch(favoriteGroceriesProvider);
-    final favoriteGroceriesList = favoriteGroceries.keys.toList();
+    final favoriteGroceriesList = favoriteGroceries.toList();
     final favoriteMarkets = ref.watch(favoriteMarketsProvider);
-    final favoriteMarketsList = favoriteMarkets.keys.toList();
+    final favoriteMarketsList = favoriteMarkets.toList();
     final futureMarkets =
         Supabase.instance.client.from('bigmarkets').select("id,name,division");
 
