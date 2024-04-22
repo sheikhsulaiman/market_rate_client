@@ -32,11 +32,9 @@ class _GroceriesPageState extends ConsumerState<GroceriesPage> {
   @override
   Widget build(BuildContext context) {
     final future = Supabase.instance.client
-            .from('groceries')
-            .select("id, name, unit, image_url")
-            .ilike('name', '%$searchText%')
-        // .eq('created_at', selectedDate.toIso8601String())
-        ;
+        .from('groceries')
+        .select("id, name, unit, image_url")
+        .ilike('name', '%$searchText%');
 
     // multiple choice value
     List<String> tags = ref.watch(divisionsProvider);
