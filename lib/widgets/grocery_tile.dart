@@ -134,7 +134,7 @@ class _GroceryTileState extends ConsumerState<GroceryTile> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const GrocerySubTileSkeleton();
               } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return const Text('Network error! Please try again later.');
               } else {
                 final data = snapshot.data as List<dynamic>;
                 final filteredData = data

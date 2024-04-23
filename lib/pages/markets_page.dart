@@ -104,7 +104,7 @@ class _MarketsPageState extends ConsumerState<MarketsPage> {
                   }
 
                   if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
+                    return const Text('Network error! Please try again later.');
                   }
 
                   final data = snapshot.data as List<dynamic>;

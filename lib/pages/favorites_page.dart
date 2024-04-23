@@ -64,7 +64,8 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
                               }
 
                               if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
+                                return const Text(
+                                    'Network error! Please try again later.');
                               }
 
                               final data = snapshot.data as List<dynamic>;
@@ -109,7 +110,8 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
                       }
 
                       if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
+                        return const Text(
+                            'Network error! Please try again later.');
                       }
 
                       final data = snapshot.data as List<dynamic>;
