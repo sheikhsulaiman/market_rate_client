@@ -42,6 +42,7 @@ dependencies:
   fl_chart: ^0.67.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  flutter_native_splash: ^2.4.0
 
 dev_dependencies:
   flutter_test:
@@ -71,8 +72,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/icon/icon.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -100,3 +101,16 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: "#8576FF"
+  image: assets/icon/icon.png
+  color_dark: "#121212"
+  image_dark: assets/icon/icon.png
+
+  android_12:
+    image: assets/icon/icon.png
+    icon_background_color: "#8576FF"
+    image_dark: assets/icon/icon.png
+
+  web: false
