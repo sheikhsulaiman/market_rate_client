@@ -63,7 +63,7 @@ class _MarketsPageState extends ConsumerState<MarketsPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
                 ),
-                hintText: 'Search for groceries',
+                hintText: 'Search for markets',
                 prefixIcon: const Icon(Icons.search),
               ),
             ),
